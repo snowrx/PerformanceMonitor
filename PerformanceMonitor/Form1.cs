@@ -35,6 +35,7 @@ namespace PerformanceMonitor
 		private readonly int GraphMargin = 1;
 		private PerformanceCounter ProcessorTime = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
 		private PerformanceCounter ProcessorPerformance = new PerformanceCounter("Processor Information", "% Processor Performance", "_Total");
+		private PerformanceCounter IdleTime = new PerformanceCounter("Processor Information", "% Idle Time", "_Total");
 		private ManagementClass ManagementClass = new ManagementClass("Win32_OperatingSystem");
 		private PictureBox ProcessorTimeGraph = new PictureBox();
 		private PictureBox ProcessorPerformanceLow = new PictureBox();
@@ -105,7 +106,7 @@ namespace PerformanceMonitor
 			{
 				DateTime start = DateTime.Now;
 				//Debug.WriteLine((start - laststart).TotalMilliseconds);
-				var pp = ProcessorPerformance.NextValue();
+				var pp = ProcessorPerformance.NextValue() * (100 - IdleTime.NextValue()) / 100;
 				var pt = ProcessorTime.NextValue();
 				var moc = ManagementClass.GetInstances();
 				var mem = 0f;
